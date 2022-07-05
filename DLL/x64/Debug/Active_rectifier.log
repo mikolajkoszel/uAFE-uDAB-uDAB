@@ -1,0 +1,12 @@
+﻿  Converter.c
+C:\Users\WibarTech1\Documents\GitHub\AFE-DAB-DAB\DLL\Converter.c(36,57): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\WibarTech1\Documents\GitHub\AFE-DAB-DAB\DLL\Converter.c(37,57): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\WibarTech1\Documents\GitHub\AFE-DAB-DAB\DLL\Converter.c(38,57): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\WibarTech1\Documents\GitHub\AFE-DAB-DAB\DLL\Converter.c(60,97): warning C4244: 'function': conversion from 'double' to 'float', possible loss of data
+C:\Users\WibarTech1\Documents\GitHub\AFE-DAB-DAB\DLL\Converter.c(114,137): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+C:\Users\WibarTech1\Documents\GitHub\AFE-DAB-DAB\DLL\Converter.c(323,142): warning C4244: 'function': conversion from 'float' to 'Uint16', possible loss of data
+C:\Users\WibarTech1\Documents\GitHub\AFE-DAB-DAB\DLL\Converter.c(324,142): warning C4244: 'function': conversion from 'float' to 'Uint16', possible loss of data
+C:\Users\WibarTech1\Documents\GitHub\AFE-DAB-DAB\DLL\Converter.c(325,142): warning C4244: 'function': conversion from 'float' to 'Uint16', possible loss of data
+C:\Users\WibarTech1\Documents\GitHub\AFE-DAB-DAB\DLL\Converter.c(343,146): warning C4244: 'function': conversion from 'float' to 'Uint16', possible loss of data
+C:\Users\WibarTech1\Documents\GitHub\AFE-DAB-DAB\DLL\Converter.c(344,146): warning C4244: 'function': conversion from 'float' to 'Uint16', possible loss of data
+  Active_rectifier.vcxproj -> C:\Users\WibarTech1\Documents\GitHub\AFE-DAB-DAB\DLL\x64\Debug\Active_rectifier.dll

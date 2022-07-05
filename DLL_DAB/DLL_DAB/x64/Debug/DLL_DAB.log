@@ -1,0 +1,12 @@
+﻿  Converter.c
+C:\Users\WibarTech1\Documents\GitHub\AFE-DAB-DAB\DLL_DAB\DLL_DAB\Converter.c(14,18): warning C4305: '=': truncation from 'double' to 'float'
+C:\Users\WibarTech1\Documents\GitHub\AFE-DAB-DAB\DLL_DAB\DLL_DAB\Converter.c(106,28): warning C4305: '=': truncation from 'double' to 'float'
+C:\Users\WibarTech1\Documents\GitHub\AFE-DAB-DAB\DLL_DAB\DLL_DAB\Converter.c(107,32): warning C4305: '=': truncation from 'double' to 'float'
+C:\Users\WibarTech1\Documents\GitHub\AFE-DAB-DAB\DLL_DAB\DLL_DAB\Converter.c(121,20): warning C4305: '=': truncation from 'double' to 'float'
+C:\Users\WibarTech1\Documents\GitHub\AFE-DAB-DAB\DLL_DAB\DLL_DAB\Converter.c(124,27): warning C4305: '=': truncation from 'double' to 'float'
+C:\Users\WibarTech1\Documents\GitHub\AFE-DAB-DAB\DLL_DAB\DLL_DAB\Converter.c(137,58): warning C4244: '=': conversion from 'const double' to 'float', possible loss of data
+C:\Users\WibarTech1\Documents\GitHub\AFE-DAB-DAB\DLL_DAB\DLL_DAB\Converter.c(152,52): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\WibarTech1\Documents\GitHub\AFE-DAB-DAB\DLL_DAB\DLL_DAB\Converter.c(180,77): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\WibarTech1\Documents\GitHub\AFE-DAB-DAB\DLL_DAB\DLL_DAB\Converter.c(189,68): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\WibarTech1\Documents\GitHub\AFE-DAB-DAB\DLL_DAB\DLL_DAB\Converter.c(192,85): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+  DLL_DAB.vcxproj -> C:\Users\WibarTech1\Documents\GitHub\AFE-DAB-DAB\x64\Debug\DLL_DAB.dll
