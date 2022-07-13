@@ -36,6 +36,37 @@ void PI_MK(struct PI_struct* PI, float error)
 	PI->u_old = PI->out;
 }
 
+void PI_MK_antiwindup(struct PI_struct* PI, float error)
+{
+	float integrator_last = PI->integrator;
+
+	PI->A = 1; // 1 / PI->Ts_Ti;
+	PI->Vp = -PI->A * PI->Kerr_old;
+	PI->Vi = PI->A * (PI->Kerr_old + PI->Kerr);
+	PI->integrator = PI->Vi * error + PI->u_old - PI->Vp * PI->e_old;
+	PI->out = PI->Vp * error + PI->integrator;
+
+	if (PI->out > PI->lim_H)
+	{
+		PI->out = PI->lim_H;
+		if ((PI->integrator < PI->lim_H) || (PI->integrator > integrator_last))
+		{
+			PI->integrator = integrator_last;
+		}
+	}
+	if (PI->out < PI->lim_L)
+	{
+		PI->out = PI->lim_L;
+		if ((PI->integrator > PI->lim_L) || (PI->integrator < integrator_last))
+		{
+			PI->integrator = integrator_last;
+		}
+	}
+	
+	PI->e_old = error;
+	PI->u_old = PI->out;
+}
+
 void PI_marek(struct PI_struct* PI, float error)
 {
 

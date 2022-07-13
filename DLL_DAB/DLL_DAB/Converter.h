@@ -35,7 +35,7 @@ struct Dab_converter_struct
 };
 
 enum load_type_enum { Nd, Resistor, Voltage_source };
-enum load_mode_enum { battery_master, battery_slave, pv };
+enum load_mode_enum { battery_master_cascaded_ff, battery_master_voltage, battery_slave,  pv };
 enum converter_state_enum {CONV_idle, CONV_softstart, CONV_load_type_detection, CONV_active   };
 enum modulation_enum {SPS, EPS, DSP};
 

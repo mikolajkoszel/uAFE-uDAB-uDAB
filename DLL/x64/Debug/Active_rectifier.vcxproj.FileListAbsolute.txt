@@ -1,3 +1,4 @@
 C:\Users\WibarTech1\workspace_v11\ACDC_SIMES\ACDC_SIMES\Symulacje\Plecs DLL\DLL\x64\Debug\Active_rectifier.dll
 C:\Users\WibarTech1\workspace_v11\ACDC_SIMES\Symulacje\Plecs DLL\DLL\x64\Debug\Active_rectifier.dll
 C:\Users\WibarTech1\Documents\GitHub\AFE-DAB-DAB\DLL\x64\Debug\Active_rectifier.dll
+C:\Users\WibarTech1\Documents\GitHub\uAFE-uDAB-uDAB\DLL\x64\Debug\Active_rectifier.dll

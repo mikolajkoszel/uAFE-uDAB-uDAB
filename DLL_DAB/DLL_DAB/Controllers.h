@@ -17,6 +17,7 @@ void kalman_filter(float measure, struct kalman* kalman);
 void precharge(struct contactors* contactors, struct deriv* deriv);
 void load_type_detection(struct contactors* contactors, struct deriv* d);
 void PI_antiwindup(struct PI_struct* PI, float error);
+void PI_MK_antiwindup(struct PI_struct* PI, float error);
 void PI_antiwindup2(struct PI_struct* PI, float error);
 void derivative(float measure, struct deriv* d);
 void PI_marek(struct PI_struct* PI, float error);
@@ -47,6 +48,9 @@ struct PI_settings {
 };
 
 struct PI_struct{
+	float Vp;
+	float Vi;
+	float A;
 	float Ki;
 	float Kp;
 	float Kerr;

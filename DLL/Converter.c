@@ -124,8 +124,8 @@ void Converter_calc()
 
                 if ((PLL.Umod_pos > 10.0f) &&
                     (current_running_max == 0.0f) && 
-                    (fabsf(U_diff - 0.5f) <= 0.5f) &&
-                    (counter_ss > 0.05f) &&//(counter_ss > 0.5f) &&
+                    (fabsf(U_diff) - 0.5f <= 0.5f) &&
+                    (counter_ss > 0.05f) &&
                     fabsf(Meas.U_dc - Conv.U_dc_ref) < 10.0f) Conv.state++;
 
                 current_running_max = 0;
