@@ -14,7 +14,7 @@ void Converter_calc()
 	I_HV_cal = Filter1_calc(Meas.I_HV, &adc1, Ts_Ti);
 	U_HV_cal = Filter1_MK(Meas.U_HV, &Conv.U_dc_Filter);
 	U_LV_cal = Filter1_calc(Meas.U_LV, &adc3, Ts_Ti);
-	I_LV_cal = Filter1_calc(Meas.I_LV, &adc4, Ts_Ti);
+	I_LV_cal = Filter1_MK(Meas.I_LV, &Conv.I_o_Filter);
 
 if (Conv.run == 0)
 	{
@@ -127,12 +127,12 @@ if (Conv.run == 0)
 							PI_I_slave.Ts_Ti = Conv.Ts;
 						}
 						if (Conv.dab_mode == battery_master_voltage) {
-							PI_U.Kp = 0.1;//1
-							PI_U.Ki = 5;//1000
+							PI_U.Kp = 1;//0.1
+							PI_U.Ki = 80;//8
 							PI_U.Kerr = 1.012;		//2 Kp of voltage controller (master)
 							PI_U.Kerr_old = -0.9875;//0.6;		//Kp of voltage controller (master)
-							PI_U.lim_H = 17.0f;
-							PI_U.lim_L = -17.0f;
+							PI_U.lim_H = 25.0f;
+							PI_U.lim_L = -25.0f;
 							PI_U.Ts_Ti = Conv.Ts;
 							PI_U.e_old = 0.0f;
 							PI_U.u_old = 0.0f;
@@ -140,14 +140,14 @@ if (Conv.run == 0)
 						}
 						if (Conv.dab_mode == battery_master_cur_vol)
 						{
-							PI_U.Kp = 0.5;//1
-							PI_U.Ki = 0.6;
+							PI_U.Kp = 0.3;//1
+							PI_U.Ki = 50;
 							PI_U.lim_H = 25.0f;
 							PI_U.lim_L = -25.0f;
-							PI_I.Kp = 5;//1
-							PI_I.Ki = 2500;
-							PI_I.lim_H = 90.0f;
-							PI_I.lim_L = -90.0f;
+							PI_I.Kp = 0.2;//5
+							PI_I.Ki = 100;//2500
+							PI_I.lim_H = 35.0f;
+							PI_I.lim_L = -35.0f;
 
 							PI_I.Ts_Ti = Conv.Ts;
 							PI_U.Ts_Ti = Conv.Ts;
@@ -207,7 +207,7 @@ if (Conv.run == 0)
 							PI_antiwindup(&PI_U, Conv.U_err);
 							aState_global->outputs[PWM_EN] = SET;
 							Conv.I_err = (PI_U.out - I_LV_cal);
-							//Conv.I_err = (Conv.U_dc_ref - I_LV_cal);
+							//Conv.I_err = (Conv.I_o_ref - I_LV_cal);
 							PI_antiwindup(&PI_I, Conv.I_err);
 						}
 						}
