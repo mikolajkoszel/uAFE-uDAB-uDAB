@@ -1,12 +1,22 @@
-﻿  Converter.c
-C:\Users\WibarTech1\Documents\GitHub\uAFE-uDAB-uDAB\DLL\Converter.c(36,57): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\WibarTech1\Documents\GitHub\uAFE-uDAB-uDAB\DLL\Converter.c(37,57): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\WibarTech1\Documents\GitHub\uAFE-uDAB-uDAB\DLL\Converter.c(38,57): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\WibarTech1\Documents\GitHub\uAFE-uDAB-uDAB\DLL\Converter.c(60,97): warning C4244: 'function': conversion from 'double' to 'float', possible loss of data
-C:\Users\WibarTech1\Documents\GitHub\uAFE-uDAB-uDAB\DLL\Converter.c(114,137): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
-C:\Users\WibarTech1\Documents\GitHub\uAFE-uDAB-uDAB\DLL\Converter.c(323,142): warning C4244: 'function': conversion from 'float' to 'Uint16', possible loss of data
-C:\Users\WibarTech1\Documents\GitHub\uAFE-uDAB-uDAB\DLL\Converter.c(324,142): warning C4244: 'function': conversion from 'float' to 'Uint16', possible loss of data
-C:\Users\WibarTech1\Documents\GitHub\uAFE-uDAB-uDAB\DLL\Converter.c(325,142): warning C4244: 'function': conversion from 'float' to 'Uint16', possible loss of data
-C:\Users\WibarTech1\Documents\GitHub\uAFE-uDAB-uDAB\DLL\Converter.c(343,146): warning C4244: 'function': conversion from 'float' to 'Uint16', possible loss of data
-C:\Users\WibarTech1\Documents\GitHub\uAFE-uDAB-uDAB\DLL\Converter.c(344,146): warning C4244: 'function': conversion from 'float' to 'Uint16', possible loss of data
+﻿  main.c
+C:\Users\WibarTech1\Documents\GitHub\uAFE-uDAB-uDAB\DLL\main.c(53,33): warning C4244: '=': conversion from 'const double' to 'float', possible loss of data
+C:\Users\WibarTech1\Documents\GitHub\uAFE-uDAB-uDAB\DLL\main.c(54,37): warning C4244: '=': conversion from 'const double' to 'float', possible loss of data
+C:\Users\WibarTech1\Documents\GitHub\uAFE-uDAB-uDAB\DLL\main.c(55,40): warning C4244: '=': conversion from 'const double' to 'float', possible loss of data
+C:\Users\WibarTech1\Documents\GitHub\uAFE-uDAB-uDAB\DLL\main.c(56,35): warning C4244: '=': conversion from 'const double' to 'float', possible loss of data
+C:\Users\WibarTech1\Documents\GitHub\uAFE-uDAB-uDAB\DLL\main.c(57,46): warning C4244: '=': conversion from 'const double' to 'float', possible loss of data
+C:\Users\WibarTech1\Documents\GitHub\uAFE-uDAB-uDAB\DLL\main.c(77,49): warning C4244: 'function': conversion from 'float' to 'Uint16', possible loss of data
+C:\Users\WibarTech1\Documents\GitHub\uAFE-uDAB-uDAB\DLL\main.c(77,65): warning C4244: 'function': conversion from 'float' to 'Uint16', possible loss of data
+C:\Users\WibarTech1\Documents\GitHub\uAFE-uDAB-uDAB\DLL\main.c(223,43): warning C4244: '=': conversion from 'const double' to 'float', possible loss of data
+C:\Users\WibarTech1\Documents\GitHub\uAFE-uDAB-uDAB\DLL\main.c(224,43): warning C4244: '=': conversion from 'const double' to 'float', possible loss of data
+C:\Users\WibarTech1\Documents\GitHub\uAFE-uDAB-uDAB\DLL\main.c(225,43): warning C4244: '=': conversion from 'const double' to 'float', possible loss of data
+C:\Users\WibarTech1\Documents\GitHub\uAFE-uDAB-uDAB\DLL\main.c(226,47): warning C4244: '=': conversion from 'const double' to 'float', possible loss of data
+C:\Users\WibarTech1\Documents\GitHub\uAFE-uDAB-uDAB\DLL\main.c(227,47): warning C4244: '=': conversion from 'const double' to 'float', possible loss of data
+C:\Users\WibarTech1\Documents\GitHub\uAFE-uDAB-uDAB\DLL\main.c(228,47): warning C4244: '=': conversion from 'const double' to 'float', possible loss of data
+C:\Users\WibarTech1\Documents\GitHub\uAFE-uDAB-uDAB\DLL\main.c(235,39): warning C4244: '=': conversion from 'const double' to 'float', possible loss of data
+C:\Users\WibarTech1\Documents\GitHub\uAFE-uDAB-uDAB\DLL\main.c(236,51): warning C4244: '=': conversion from 'const double' to 'float', possible loss of data
+C:\Users\WibarTech1\Documents\GitHub\uAFE-uDAB-uDAB\DLL\main.c(237,52): warning C4244: '=': conversion from 'const double' to 'float', possible loss of data
+C:\Users\WibarTech1\Documents\GitHub\uAFE-uDAB-uDAB\DLL\main.c(238,54): warning C4244: '=': conversion from 'const double' to 'float', possible loss of data
+C:\Users\WibarTech1\Documents\GitHub\uAFE-uDAB-uDAB\DLL\main.c(269,47): warning C4244: '=': conversion from 'const double' to 'float', possible loss of data
+C:\Users\WibarTech1\Documents\GitHub\uAFE-uDAB-uDAB\DLL\main.c(270,47): warning C4244: '=': conversion from 'const double' to 'float', possible loss of data
+C:\Users\WibarTech1\Documents\GitHub\uAFE-uDAB-uDAB\DLL\main.c(271,47): warning C4244: '=': conversion from 'const double' to 'float', possible loss of data
   Active_rectifier.vcxproj -> C:\Users\WibarTech1\Documents\GitHub\uAFE-uDAB-uDAB\DLL\x64\Debug\Active_rectifier.dll

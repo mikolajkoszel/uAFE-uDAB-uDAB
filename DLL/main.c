@@ -127,8 +127,8 @@ DLLEXPORT void plecsStart(struct SimulationState* aState)
 
     CIC1_adaptive_filter_init(&Conv.CIC1_U_dc, 1000.0f, OSR);
     Conv.U_dc_Filter1.Ts_Ti = Conv.Ts / 0.005f;
-    Conv.Iq_ref_Filter1.Ts_Ti = Conv.Ts / 0.001f;
-    Conv.Id_ref_Filter1.Ts_Ti = Conv.Ts / 0.001f;
+    Conv.Iq_ref_Filter1.Ts_Ti = Conv.Ts / 0.005f; //0.01f
+    Conv.Id_ref_Filter1.Ts_Ti = Conv.Ts / 0.005f;//0.01f
 
     ///////////////////////////////////////////////////////////////////
 
@@ -146,7 +146,7 @@ DLLEXPORT void plecsStart(struct SimulationState* aState)
 
     ///////////////////////////////////////////////////////////////////
 
-    register float p_pr_i = Conv.L_conv / (3.0f * Conv.Ts);
+    register float p_pr_i = Conv.L_conv / (15.0f * Conv.Ts); //15.0f
     Conv.Kp_I = p_pr_i;
     register float r_pr_i = Conv.L_conv * MATH_PI / Conv.Ts;
     r_pr_i /= MATH_2PI * 50.0f;
@@ -159,7 +159,7 @@ DLLEXPORT void plecsStart(struct SimulationState* aState)
     {
        Conv.Resonant_I_a_odd[i].gain =
        Conv.Resonant_I_b_odd[i].gain =
-       Conv.Resonant_I_c_odd[i].gain = 2.0f * r_pr_i;// / (float)(2 * i + 1);
+       Conv.Resonant_I_c_odd[i].gain = 2.0f * r_pr_i;// / (float)(2 * i + 1); //2.0f
 
        Conv.Resonant_I_a_odd[i].trigonometric.ptr =
        Conv.Resonant_I_b_odd[i].trigonometric.ptr =
@@ -259,8 +259,8 @@ DLLEXPORT void plecsOutput(struct SimulationState* aState)
 
         aState_global->outputs[19] = Grid.sum.P_conv_1h;
         aState_global->outputs[20] = Grid.sum.Q_conv_1h;
-        aState_global->outputs[21] = 0.0f;// Grid.sum.S_conv_1h;
-        aState_global->outputs[22] = Grid.sum.PF_conv_1h;
+        aState_global->outputs[21] = Conv.Id_ref_Filter1.out;
+        aState_global->outputs[22] = Conv.Iq_ref_Filter1.out;
 
     }
 

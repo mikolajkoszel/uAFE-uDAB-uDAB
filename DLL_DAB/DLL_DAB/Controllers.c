@@ -1,5 +1,6 @@
 #include"stdafx.h"
 
+
 void PI_antiwindup(struct PI_struct* PI, float error)
 {
     float integrator_last = PI->integrator;
@@ -216,8 +217,7 @@ float Filter1_calc(float input, adc_t* add, float Ts_Ti) {
 }
 
 float Filter1_MK(float in, struct Filter_struct* filter) {
-	filter->out = 0.94 * filter->out_last + 0.03 * in + 0.03 * filter->in_last;
-
+	filter->out = (1-2*filter->Ts_Ti) * filter->out_last + filter->Ts_Ti * in + filter->Ts_Ti * filter->in_last;
 	filter->out_last = filter->out;
 	filter->in_last = in;
 	return filter->out;

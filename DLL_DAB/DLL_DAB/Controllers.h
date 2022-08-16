@@ -16,6 +16,7 @@ extern float CIC1_adaptive_filter(struct CIC1_adaptive_global_struct* CIC_global
 void kalman_filter(float measure, struct kalman* kalman);
 void precharge(struct contactors* contactors, struct deriv* deriv);
 void load_type_detection(struct contactors* contactors, struct deriv* d);
+void controller_Marek();
 void PI_antiwindup(struct PI_struct* PI, float error);
 void PI_MK_antiwindup(struct PI_struct* PI, float error);
 void PI_antiwindup2(struct PI_struct* PI, float error);
@@ -84,6 +85,7 @@ struct Filter_struct
 	float out;
 	float out_last;
 	float in_last;
+	float Ts_Ti;
 
 };
 

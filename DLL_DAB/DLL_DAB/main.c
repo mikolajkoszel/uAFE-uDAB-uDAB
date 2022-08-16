@@ -53,7 +53,7 @@ DLLEXPORT void plecsStart(struct SimulationState* aState)
 	float OSR = (Uint16)(0.02f / Conv.Ts + 0.5f);
 
 	aState_global = aState;
-	Conv.U_dc_Filter1.Ts_Ti = 0.005;//Conv.Ts / 0.001f;
+	Conv.U_dc_Filter.Ts_Ti = 0.03;
 	CIC1_adaptive_filter_init(&Conv.CIC1_U_dc, 1000.0f, OSR);
 	Conv.run = 0;
 	Converter_calc();

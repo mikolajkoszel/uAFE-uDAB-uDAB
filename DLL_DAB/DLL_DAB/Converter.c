@@ -5,17 +5,16 @@ adc_t adc2;
 adc_t adc3;
 adc_t adc4;
 int cnt;
-
+float Ts_Ti = 0.1;
+float I_HV_cal, U_HV_cal, U_LV_cal, I_LV_cal;
+float ADC_Ts_Ti = 0.001;
 void Converter_calc()
 {
 //	CIC1_adaptive_filter(&CIC1_adaptive_global, &Conv.CIC1_U_dc, Meas.U_HV);
-//	Filter1_calc(&Conv.U_dc_Filter1, Meas.U_HV);
-//	Conv.U_dc_Filter =  Conv.CIC1_U_dc.out;//Conv.U_dc_Filter1.out;
-	ADC_Ts_Ti = 0.03;
-	float I_HV_cal = Filter1_calc(Meas.I_HV, &adc1, ADC_Ts_Ti);
-	float U_HV_cal = Filter1_MK(Meas.U_HV, &Conv.U_dc_Filter);//Filter1_calc(Meas.U_HV, &adc2, ADC_Ts_Ti);
-	float U_LV_cal = Filter1_calc(Meas.U_LV, &adc3, ADC_Ts_Ti);
-	float I_LV_cal = Filter1_MK(Meas.I_LV, &Conv.I_o_Filter);//Filter1_calc(Meas.I_LV, &adc4, ADC_Ts_Ti);
+	I_HV_cal = Filter1_calc(Meas.I_HV, &adc1, Ts_Ti);
+	U_HV_cal = Filter1_MK(Meas.U_HV, &Conv.U_dc_Filter);
+	U_LV_cal = Filter1_calc(Meas.U_LV, &adc3, Ts_Ti);
+	I_LV_cal = Filter1_calc(Meas.I_LV, &adc4, Ts_Ti);
 
 if (Conv.run == 0)
 	{
@@ -83,9 +82,8 @@ if (Conv.run == 0)
 						counter_ss += Conv.Ts;
 						break;
 					}
-					case CONV_load_type_detection: //okreœlenie typu obci¹¿enia R vs Ÿród³o napiêcia
+					case CONV_init_controllers: //okreœlenie typu obci¹¿enia R vs Ÿród³o napiêcia
 					{
-						//Marek
 						if (Conv.dab_mode == battery_slave) {
 							PI_U.Kp = 0.5;		//2 Kp of voltage controller (master)
 							PI_U.Ki = 10;//0.6;		//Kp of voltage controller (master)
@@ -103,7 +101,6 @@ if (Conv.run == 0)
 							PI_I.Kerr = 0.2634f;
 							PI_I.Kerr_old = 0.2366f;
 						}
-						//Mikolaj
 						if (Conv.dab_mode == battery_master_cascaded_ff) {
 							PI_U.Kerr = 0.1901 * 100;		//2 Kp of voltage controller (master)
 							PI_U.Kerr_old = 0.1899 * 100;//0.6;		//Kp of voltage controller (master)
@@ -123,16 +120,15 @@ if (Conv.run == 0)
 							PI_I.Kp = 0.1;		//0.1 Kp of current controller (master)
 							PI_I.Ki = 18.0;	//180 Ki of current controller (master)
 
-							PI_I_slave.Kp = 0.01;		//Kp of current controller (master)
-							PI_I_slave.Ki = 18.0;	//Ki of current controller (master)
+							PI_I_slave.Kp = 0.1;		//Kp of current controller (master)
+							PI_I_slave.Ki = 180.0;	//Ki of current controller (master)
 							PI_I_slave.lim_H = 90.0;
 							PI_I_slave.lim_L = -90.0;
 							PI_I_slave.Ts_Ti = Conv.Ts;
 						}
-
 						if (Conv.dab_mode == battery_master_voltage) {
-							PI_U.Kp = 1;
-							PI_U.Ki = 1000;
+							PI_U.Kp = 0.1;//1
+							PI_U.Ki = 5;//1000
 							PI_U.Kerr = 1.012;		//2 Kp of voltage controller (master)
 							PI_U.Kerr_old = -0.9875;//0.6;		//Kp of voltage controller (master)
 							PI_U.lim_H = 17.0f;
@@ -142,18 +138,33 @@ if (Conv.run == 0)
 							PI_U.u_old = 0.0f;
 					
 						}
+						if (Conv.dab_mode == battery_master_cur_vol)
+						{
+							PI_U.Kp = 0.5;//1
+							PI_U.Ki = 0.6;
+							PI_U.lim_H = 25.0f;
+							PI_U.lim_L = -25.0f;
+							PI_I.Kp = 5;//1
+							PI_I.Ki = 2500;
+							PI_I.lim_H = 90.0f;
+							PI_I.lim_L = -90.0f;
+
+							PI_I.Ts_Ti = Conv.Ts;
+							PI_U.Ts_Ti = Conv.Ts;
+						}
 						Conv.state++;
 						break;
 					}
 					case CONV_active:	 //praca w pêtli zamkniêtej
 					{   Conv.modulation = SPS;
-						if (Conv.dab_mode == battery_slave) {
+					
+						if (Conv.dab_mode == battery_slave) { //0
 							aState_global->outputs[PWM_EN] = SET;
 							Conv.I_err = (aState_global->inputs[0] - I_LV_cal);
 							PI_antiwindup(&PI_I, Conv.I_err);
 							//PI_MK(&PI_I, Conv.I_err);
 						}
-						else if (Conv.dab_mode == battery_master_cascaded_ff) {
+						else if (Conv.dab_mode == battery_master_cascaded_ff) { //1
 							aState_global->outputs[PWM_EN] = SET;
 
 							Meas.U_HV = U_HV_cal;
@@ -175,19 +186,30 @@ if (Conv.run == 0)
 							{
 								Conv.I_err = Conv.I_err + 5*(Conv.U_err + 5);
 							}*/
-								
+								//bagno
 							PI_MK(&PI_I, Conv.I_err);
 							
 							aState_global->outputs[0] = Meas.I_LV;
 
 						}
-						else if (Conv.dab_mode == battery_master_voltage) {
+						else if (Conv.dab_mode == battery_master_voltage) { //2
+							
 							aState_global->outputs[PWM_EN] = SET;
 							Conv.U_err = -(Conv.U_dc_ref - U_HV_cal);
 							//PI_MK(&PI_U, Conv.U_err);
-							PI_MK_antiwindup(&PI_U, Conv.U_err);
+							PI_antiwindup(&PI_U, Conv.U_err);
 							PI_I.out = PI_U.out;
+						}
+						else if (Conv.dab_mode == battery_master_cur_vol) //3
+						{
 
+							Conv.U_err = -(Conv.U_dc_ref - U_HV_cal);
+							PI_antiwindup(&PI_U, Conv.U_err);
+							aState_global->outputs[PWM_EN] = SET;
+							Conv.I_err = (PI_U.out - I_LV_cal);
+							//Conv.I_err = (Conv.U_dc_ref - I_LV_cal);
+							PI_antiwindup(&PI_I, Conv.I_err);
+						}
 						}
 						if (Conv.modulation == SPS)
 							{
@@ -217,7 +239,7 @@ if (Conv.run == 0)
 								if (Conv.fis.ps4 < -180) Conv.fis.ps4 = Conv.fis.ps4 + 360;
 
 							}
-						aState_global->outputs[0] = Conv.U_dc_Filter.out;
+						aState_global->outputs[0] = U_HV_cal;//Conv.U_dc_Filter.out;
 						aState_global->outputs[8] = Conv.I_o_Filter.out;
 						aState_global->outputs[9] = PI_I.lim_H;
 						aState_global->outputs[10] = PI_I.lim_L;
@@ -227,15 +249,15 @@ if (Conv.run == 0)
 						aState_global->outputs[14] = Conv.fis.ps4;
 						aState_global->outputs[15] = Conv.U_err;
 						aState_global->outputs[16] = PI_U.out;
-						aState_global->outputs[17] = PI_U.integrator;
-						aState_global->outputs[18] = 0;
+						aState_global->outputs[17] = Conv.I_err;
+						aState_global->outputs[18] = PI_I.out;
 						
 						break;
 					}
 				}
 
 			}
-	}
+	
 	
 
 
