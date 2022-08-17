@@ -67,16 +67,29 @@ if (Conv.run == 0)
 							Conv.S1 = U_o_diff;
 							Conv.S2 = U_dc_diff;
 						
-							if ((fabsf(U_o_diff - 0.5f) <= 0.5f) && (fabsf(U_dc_diff - 0.5f) <= 0.5f)) //&&
-								//(Meas.U_HV > 20.0f) &&
-								//(Meas.U_LV > 20.0f))
+							if ((fabsf(U_o_diff - 0.5f) <= 0.5f) && (fabsf(U_dc_diff - 0.5f) <= 0.5f)  &&
+								(Meas.U_HV > Conv.U_dc_ref -20.0f) &&
+								(Meas.U_HV < Conv.U_dc_ref + 20.0f))	
 							{
 								aState_global->outputs[s_rel_no_o] = CLEAR;
 								aState_global->outputs[s_rel_no_dc] = CLEAR;
 								aState_global->outputs[s_rel_main_o]  = SET;
 								aState_global->outputs[s_rel_main_dc] = SET;
+								aState_global->outputs[PWM_EN] = CLEAR;
 								Conv.state++;
 							}
+							else if (((fabsf(U_o_diff - 0.5f) <= 0.5f) && (fabsf(U_dc_diff - 0.5f) <= 0.5f)) && (Meas.U_HV < Conv.U_dc_ref - 20.0f))
+							{
+								Conv.phase_shift = 0.0f;
+								aState_global->outputs[PWM_EN] = SET;
+								aState_global->outputs[s_rel_main_o] = SET;
+							}
+
+							else if (Meas.U_HV > Conv.U_dc_ref - 20.0f) 
+							{
+								aState_global->outputs[PWM_EN] = CLEAR;
+							}
+
 							counter_ss_last = counter_ss;
 						}
 						counter_ss += Conv.Ts;
@@ -211,48 +224,50 @@ if (Conv.run == 0)
 							PI_antiwindup(&PI_I, Conv.I_err);
 						}
 						}
-						if (Conv.modulation == SPS)
-							{
-								Conv.fis.ps1 = 0;
-								Conv.fis.ps2 = 180;
-								Conv.fis.ps3 = PI_I.out;
-								if (PI_I.out >= 0) Conv.fis.ps4 = PI_I.out - 180;
-								else Conv.fis.ps4 = PI_I.out + 180;
-
-							}
-						else if (Conv.modulation == EPS)
-							{
-								Conv.fis.voltage_ratio_sqrt = sqrt(U_LV_cal / U_HV_cal * 1 / Conv.n);
-								Conv.fis.voltage_ratio = U_LV_cal / U_HV_cal * 1 / Conv.n;
-								Conv.fis.ps1 = 0; // HV1 k¹t odniesienia
-								Conv.fis.ps2 = (Conv.fis.voltage_ratio_sqrt)*180; // HV2 zale¿y tylko od stosunku napiêæ, ale zawiera siê w przedziale 90-180 deg
-								if (Conv.fis.ps2 > 180.0f) Conv.fis.ps2 = 180.0f;
-								if (Conv.fis.ps2 < 90.0f) Conv.fis.ps2 = 90.0f;
-
-								Conv.fis.ps3 = PI_I.out; //LV1 wyjœcie z regulatora pr¹du wyjœciowego, ograniczenia zale¿¹ od stosunku napiêæ - > przesuwanie siê k¹ta mocy szczytowej w zale¿noœci of ps2
-								PI_I.lim_H = 90 - (1 - Conv.fis.voltage_ratio_sqrt) * 90; 
-								PI_I.lim_L = -90.0 - (1 - Conv.fis.voltage_ratio_sqrt) * 90;
-								
-								Conv.fis.ps4 = Conv.fis.ps3 + 180-(Conv.fis.voltage_ratio_sqrt - 1) * 180; // LV2 analogicznie do HV2 
-								if ((Conv.fis.ps4 - Conv.fis.ps3) > 180) Conv.fis.ps4 = Conv.fis.ps3 + 180.0;
-								if (Conv.fis.ps4 > 180) Conv.fis.ps4 = Conv.fis.ps4 - 360; // przesuniêcie wynikaj¹ce z ograniczenia modulatora (-180,180)
-								if (Conv.fis.ps4 < -180) Conv.fis.ps4 = Conv.fis.ps4 + 360;
-
-							}
-						aState_global->outputs[0] = U_HV_cal;//Conv.U_dc_Filter.out;
-						aState_global->outputs[8] = Conv.I_o_Filter.out;
-						aState_global->outputs[9] = PI_I.lim_H;
-						aState_global->outputs[10] = PI_I.lim_L;
-						aState_global->outputs[11] = Conv.fis.ps1;
-						aState_global->outputs[12] = Conv.fis.ps2;
-						aState_global->outputs[13] = Conv.fis.ps3;
-						aState_global->outputs[14] = Conv.fis.ps4;
-						aState_global->outputs[15] = Conv.U_err;
-						aState_global->outputs[16] = PI_U.out;
-						aState_global->outputs[17] = Conv.I_err;
-						aState_global->outputs[18] = PI_I.out;
+					break;
+					}
+					aState_global->outputs[0] = U_HV_cal;//Conv.U_dc_Filter.out;
+					aState_global->outputs[8] = Conv.I_o_Filter.out;
+					aState_global->outputs[9] = PI_I.lim_H;
+					aState_global->outputs[10] = PI_I.lim_L;
+					aState_global->outputs[11] = Conv.fis.ps1;
+					aState_global->outputs[12] = Conv.fis.ps2;
+					aState_global->outputs[13] = Conv.fis.ps3;
+					aState_global->outputs[14] = Conv.fis.ps4;
+					aState_global->outputs[15] = Conv.U_err;
+					aState_global->outputs[16] = PI_U.out;
+					aState_global->outputs[17] = Conv.I_err;
+					aState_global->outputs[18] = PI_I.out;
 						
-						break;
+					
+					if (Conv.modulation == SPS)
+					{
+						Conv.phase_shift = PI_I.out;
+						Conv.fis.ps1 = 0;
+						Conv.fis.ps2 = 180;
+						Conv.fis.ps3 = Conv.phase_shift;
+						if (PI_I.out >= 0.0f) Conv.fis.ps4 = Conv.phase_shift - 180;
+						else Conv.fis.ps4 = Conv.phase_shift + 180;
+
+					}
+					else if (Conv.modulation == EPS)
+					{
+						Conv.fis.voltage_ratio_sqrt = sqrt(U_LV_cal / U_HV_cal * 1 / Conv.n);
+						Conv.fis.voltage_ratio = U_LV_cal / U_HV_cal * 1 / Conv.n;
+						Conv.fis.ps1 = 0; // HV1 k¹t odniesienia
+						Conv.fis.ps2 = (Conv.fis.voltage_ratio_sqrt) * 180; // HV2 zale¿y tylko od stosunku napiêæ, ale zawiera siê w przedziale 90-180 deg
+						if (Conv.fis.ps2 > 180.0f) Conv.fis.ps2 = 180.0f;
+						if (Conv.fis.ps2 < 90.0f) Conv.fis.ps2 = 90.0f;
+
+						Conv.fis.ps3 = PI_I.out; //LV1 wyjœcie z regulatora pr¹du wyjœciowego, ograniczenia zale¿¹ od stosunku napiêæ - > przesuwanie siê k¹ta mocy szczytowej w zale¿noœci of ps2
+						PI_I.lim_H = 90 - (1 - Conv.fis.voltage_ratio_sqrt) * 90;
+						PI_I.lim_L = -90.0 - (1 - Conv.fis.voltage_ratio_sqrt) * 90;
+
+						Conv.fis.ps4 = Conv.fis.ps3 + 180 - (Conv.fis.voltage_ratio_sqrt - 1) * 180; // LV2 analogicznie do HV2 
+						if ((Conv.fis.ps4 - Conv.fis.ps3) > 180) Conv.fis.ps4 = Conv.fis.ps3 + 180.0;
+						if (Conv.fis.ps4 > 180) Conv.fis.ps4 = Conv.fis.ps4 - 360; // przesuniêcie wynikaj¹ce z ograniczenia modulatora (-180,180)
+						if (Conv.fis.ps4 < -180) Conv.fis.ps4 = Conv.fis.ps4 + 360;
+
 					}
 				}
 

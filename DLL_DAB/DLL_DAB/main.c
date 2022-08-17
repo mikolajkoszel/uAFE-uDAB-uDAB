@@ -57,6 +57,7 @@ DLLEXPORT void plecsStart(struct SimulationState* aState)
 	Conv.I_o_Filter.Ts_Ti = 0.03;
 	CIC1_adaptive_filter_init(&Conv.CIC1_U_dc, 1000.0f, OSR);
 	Conv.run = 0;
+	Conv.modulation = SPS;
 	Converter_calc();
 }	
 
